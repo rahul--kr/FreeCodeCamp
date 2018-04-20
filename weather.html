@@ -1,0 +1,101 @@
+<html>
+	<head>
+		<title>Current Weather</title>
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+		<link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+		<style>
+body {
+	background-color: #42affc;
+}
+
+.box {
+	border-radius: 7px;
+	background-color: rgba(255,255,255,0.4);
+	width: 50%;
+	height: auto;
+	margin: 150px auto;
+	padding: 15px;
+}
+
+label {
+	width: 50%;
+	text-align: right;
+}
+
+#icon {
+	width: 50px;
+	margin: auto;
+}
+		</style>
+	</head>
+	<body>
+		<div class="box">
+			<h1 class="text-center">free code camp weather app</h1>
+			<div class="input row">
+				<div class="col-xs-6 col-xs-offset-2"><input type="text" id="city" class="form-control" placeholder="search by city name"/></div>
+				<button id="btn" class="btn col-xs-2"> <i class="fa fa-search" aria-hidden="true"> </i> GO </button>
+			</div>
+			<h3><p class="text-center">CURRENT CITY: <span id="cityName">City Name</span>, <span id="countryCode">Country Code</span></p></h3>
+			<div class="weatherData">
+				<h4 class="text-center"><u><span id="main"></span></u></h4>
+				<div id="icon">
+					<img src="" alt="current weather icon" id="currIcon" />
+				</div>
+				<label>TEMPERATURE : </label><a href="javascript:void(0);" onclick="changeUnits();" id="tempScaleBtn"> <span id="tempData">MAIN.TEMP</span><sup>o</sup> <span id="tempScale">F</span></a> <br />
+				<label>PRESSURE : </label><span id="pres"> MAIN.PRESSURE</span> <br />
+				<label>HUMIDITY : </label><span id="humi"> MAIN.HUMIDITY</span> <br />
+			</div>
+		</div>
+
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+	<script type="text/javascript">
+$(document).ready( function() {
+	getWeatherData( '&units=metric' );
+});
+
+$( "#btn" ).click( function() {
+	getWeatherData( '&units=metric' );
+});
+
+function changeUnits() {
+	var scale = $( "#tempScale" ).html();
+	if( scale == "F" ) var units = '&units=metric';
+	else var units = '&units=imperial';
+	getWeatherData( units );
+}
+
+function getWeatherData( units='&units=metric' ) {
+	var city = $( "#city" ).val();
+	if( city == '' ) city = "Bhubaneswar";
+	var api = 'https://api.openweathermap.org/data/2.5/weather?q=';
+	var appid = '&APPID=040e8322c1cecb38a1fbf0cd5dc9cee6';
+/*
+	$.ajax({
+		url: (api + city + units + appid)
+	}).done( function( responseJSON ) {
+ 		$( "#cityName" ).html( responseJSON.name );
+		$( "#countryCode" ).html( responseJSON.sys.country );
+		$( "#main" ).html( responseJSON.weather[0].main );
+		$( "#tempData" ).html( responseJSON.main.temp );
+		if( units === '&units=metric' ) $( "#tempScale" ).html( "C" );
+		else $( "#tempScale" ).html( "F" );
+		$( "#pres" ).html( ' ' + responseJSON.main.pressure + ' hPa' );
+		$( "#humi" ).html( ' ' + responseJSON.main.humidity + ' %' );
+		$( "#currIcon" ).attr( 'src', 'http://openweathermap.org/img/w/' + responseJSON.weather[0].icon + '.png' );
+	});
+*/
+	var weatherData = $.getJSON( (api + city + units + appid), function() {
+ 		$( "#cityName" ).html( weatherData.responseJSON.name );
+		$( "#countryCode" ).html( weatherData.responseJSON.sys.country );
+		$( "#main" ).html( weatherData.responseJSON.weather[0].main );
+		$( "#tempData" ).html( weatherData.responseJSON.main.temp );
+		if( units === '&units=metric' ) $( "#tempScale" ).html( "C" );
+		else $( "#tempScale" ).html( "F" );
+		$( "#pres" ).html( ' ' + weatherData.responseJSON.main.pressure + ' hPa' );
+		$( "#humi" ).html( ' ' + weatherData.responseJSON.main.humidity + ' %' );
+		$( "#currIcon" ).attr( 'src', 'http://openweathermap.org/img/w/' + weatherData.responseJSON.weather[0].icon + '.png' );
+	} );
+}
+	</script>
+	</body>
+</html>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Simon Game</title>
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+		<link href="bootstrap.min.css" rel="stylesheet" type="text/css">
+		<style type="text/CSS">
+.main {
+	width: 100%;
+}
+
+.game-div {
+	position: relative;
+	margin: 50px auto;
+	width: 504px;
+}
+
+.msg-div {
+	font-size: 25px;
+}
+
+p.center-block {
+	font-weight: 16px;
+}
+
+.small-circle {
+	position: absolute;
+	height: 250px;
+	width: 250px;
+	border-radius: 50%;
+	top: 125px;
+	left: 125px;
+	background-color: #FFF;
+	border: 10px solid black;
+	z-index: 5;
+}
+
+.btn-top-left {
+	height: 250px;
+	width: 250px;
+	border-top-left-radius: 250px;
+	background-color: #00A74A;
+}
+
+.btn-top-right {
+	height: 250px;
+	width: 250px;
+	border-top-right-radius: 250px;
+	background-color: #9F0F17;
+}
+
+.btn-bottom-left {
+	margin-top: 2px;
+	height: 250px;
+	width: 250px;
+	border-bottom-left-radius: 250px;
+	background-color: #094A8F;
+}
+
+.btn-bottom-right {
+	height: 250px;
+	width: 250px;
+	border-bottom-right-radius: 250px;
+	background-color: #CCA707;
+}
+
+button {
+	outline: 0;
+	border: 10px solid black;
+	cursor: pointer;
+}
+
+button:focus {
+	outline: 0;
+}
+
+button::-moz-focus-inner {
+	border: 0;
+}
+
+p.center-block {
+	font-size: 1.75em;
+}
+
+span.glyphicon {
+	font-size: 1.5em;
+}
+
+.score {
+	font-size: 1.25em;
+}
+
+.play-stop>button {
+	background: none;
+	border: 0px;
+}
+
+.game-div>button {
+	box-shadow: 0 0 5px 2px #000000;
+}
+
+.switch {
+	height: 20px;
+	background-color: #9F0F17;
+	margin: auto;
+	border-radius: 3px;
+    box-sizing: border-box;
+	padding: 0;
+}
+
+.press-off {
+	width: 50%;
+	height: 100%;
+	float: left;
+	background-color: #00A74A;
+    box-sizing: content-box;
+	border-radius: 3px;
+	cursor: pointer;
+}
+
+.press-on {
+	width: 50%;
+	height: 100%;
+	float: right;
+	background-color: #00A74A;
+    box-sizing: content-box;
+	border-radius: 3px;
+	cursor: pointer;
+}
+
+.illuminate {
+	opacity: 0.5;
+}
+
+#tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+}
+
+#tooltip-text {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+}
+
+#tooltip:hover #tooltip-text {
+    visibility: visible;
+}
+		</style>
+	</head>
+	<body>
+		<div class="main">
+			<div class="game-div">
+				<div class="left-bar bars"></div>
+				<div class="top-bar bars"></div>
+				<div class="right-bar bars"></div>
+				<div class="bottom-bar bars"></div>
+				<button class="btn-top-left" onclick="userButtonPress(1)"></button>
+				<button class="btn-top-right" onclick="userButtonPress(2)"></button>
+				<br/>
+				<div class="small-circle">
+					<br />
+					<p class="center-block text-center">Simon<sup> &reg;<sup></p>
+					<div class="score center-block text-center text-danger"> SCORE: <span class="score-board text-danger">0</span></div>
+					<p class="center-block text-center play-stop row">
+						<button class="" onclick="switchOnOff()"><span id="play-stop-button" class="glyphicon glyphicon-play text-success" aria-hidden="true" onclick="switchOnOff()"></span></button>
+					</p>
+					<p class="text-center">
+						Play in strict mode?
+						<!--
+						<br/> <span id="tooltip-text">If playing in strict mode, if you get a button press wrong the game restarts with 0 score.</span>
+						-->
+					</p>
+					<div class="text-center">
+						<div class="col-xs-3 col-xs-offset-1 text-right text-danger">OFF</div>
+						<div id="switch" class="switch col-xs-4">
+							<div class="press-off" onclick="strictOnOff()"></div>
+						</div>
+						<div class="col-xs-3 text-left text-success">ON</div>
+					</div>
+				</div>
+				<button class="btn-bottom-left" onclick="userButtonPress(3)"></button>
+				<button class="btn-bottom-right" onclick="userButtonPress(4)"></button>
+			</div>
+			<div class="msg-div hidden text-danger text-center">
+				You played the wrong sequence. Let's try this again!
+			</div>
+		</div>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+		<script src="jquery.min.js"></script>
+		<script type="text/javascript">
+var playing, userTurn, strict, index, interval, previousButton;
+var sequence = [];
+
+$( document ).ready( function() {
+	start();
+});
+
+function start() {
+	playing = 0;
+	userTurn = 0;
+	score = 0;
+	strict = 0;
+	index = 0;
+	sequence = [];
+	$( ".score-board" ).html("0");
+	$( "#play-stop-button" ).removeClass( "glyphicon-stop text-danger" );
+	$( "#play-stop-button" ).addClass( "glyphicon-play text-success" );
+}
+
+function switchOnOff() {
+	if( typeof(interval) !== 'undefined' ) {
+		clearInterval( interval );
+	}
+	if( playing == 0 ) {
+		strict = $( "#switch>div" ).hasClass( "press-off" ) ? 0 : 1;
+		playing = 1;
+		$( "#play-stop-button" ).removeClass( "glyphicon-play text-success" );
+		$( "#play-stop-button" ).addClass( "glyphicon-stop text-danger" );
+		play();
+	} else {
+		start();
+	}
+}
+
+function strictOnOff() {
+	if( playing == 0 ) {
+		if( $( "#switch>div" ).hasClass( "press-off" ) ) {
+			$( "#switch>div" ).removeClass( "press-off" );
+			$( "#switch>div" ).addClass( "press-on" );
+		} else {
+			$( "#switch>div" ).removeClass( "press-on" );
+			$( "#switch>div" ).addClass( "press-off" );
+		}
+	}
+}
+
+function play( addNew = true ) {
+	if( addNew ) {
+		sequence[ sequence.length ] = Math.ceil( Math.random() * 4 );
+	}
+	index = 0;
+	interval = setInterval( function() {
+		setTimeout( function() {
+			$('button').removeClass("illuminate");
+		}, 500 );
+		if( index == sequence.length ) {
+			index = 0;
+			userTurn = 1;
+			clearInterval(interval);
+		} else {
+			illuminate( sequence[index++] );
+		}
+	}, 1000);
+}
+
+function illuminate( button ) {
+	switch( button ) {
+		case 1:
+			$( ".btn-top-left" ).addClass( "illuminate" );
+			break;
+		case 2:
+			$( ".btn-top-right" ).addClass( "illuminate" );
+			break;
+		case 3:
+			$( ".btn-bottom-left" ).addClass( "illuminate" );
+			break;
+		case 4:
+			$( ".btn-bottom-right" ).addClass( "illuminate" );
+			break;
+		default:
+			break;
+	}
+}
+
+function userButtonPress( btn ) {
+	if( playing == 1 && userTurn == 1 ) {
+		if( sequence[index] == btn ) {
+			illuminate( btn );
+			setTimeout( function() {
+				$('button').removeClass("illuminate");
+			}, 500 );
+			index++;
+			if( index == sequence.length ) {
+				$( ".score-board" ).html( sequence.length );
+				userTurn = 0;
+				play();
+			}
+		} else {
+			$( ".msg-div" ).removeClass( "hidden" );
+			setTimeout( function() {
+				$( ".msg-div" ).addClass( "hidden" );
+			}, 1000);
+			userTurn = 0;
+			if( strict == 1 ) {
+				newSequence();
+			}
+			play(false);
+			index = 0;
+		}
+	}
+}
+
+function newSequence() {
+	var len = sequence.length;
+	sequence = [ ];
+	for( var i=0; i<len; i++ ) {
+		sequence[i] = Math.ceil( Math.random() * 4 );
+	}
+}
+		</script>
+	</body>
+</html>

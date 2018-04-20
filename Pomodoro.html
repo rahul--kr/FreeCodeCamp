@@ -1,0 +1,156 @@
+<html>
+	<head>
+		<title>Pomodoro Clock</title>
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+		<link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+		<style>
+body {
+	background-color: #42affc;
+}
+
+.box {
+	border-radius: 7px;
+	background-color: rgba(255,255,255,0.4);
+	width: 700px;
+	height: auto;
+	margin: 150px auto;
+	padding: 15px;
+}
+
+button {
+	background: none;
+	border: 0px;
+}
+
+button, span {
+	font-size: 20px;
+}
+
+.p {
+	display: inline;
+}
+
+#ooo {
+	background-color: rgba(255,255,255,0.4);
+	border: 5px black;
+	border-radius: 50%;
+	height: 223.333px;
+}
+
+button>p {
+	font-size: 25px;
+}
+		</style>
+	</head>
+	
+	<body>
+		<div class="box">
+			<h3 class="text-center">Pomodoro Clock</h3> <br />
+			<div class="row">
+				<div class="col-xs-offset-2 col-xs-3">
+					<p class="p text-center col-xs-12">Break Length</p> <br/>
+					<p class="p text-center col-xs-12"> <button class="butn" onclick="decrease('b')"> - </button><span id="txtBreak"> 5 </span><button class="butn" onclick="increase('b')"> + </button> </p>
+				</div>
+				<div class="col-xs-offset-2 col-xs-3">
+					<p class="p text-center col-xs-12">Session Length</p> <br/>
+					<p class="p text-center col-xs-12"> <button class="butn" onclick="decrease('s')"> - </button><span id="txtSession"> 25 </span><button class="butn" onclick="increase('s')"> + </button> </p>
+				</div>
+			</div>
+			<div>
+				<button id="ooo" class="col-xs-4 col-xs-offset-4" onClick="ooo()">
+					<p id="scope">Session</p>
+					<br />
+					<p id="time">time</p>
+				</button>
+			</div>
+		</div>
+
+		<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+		<script type="text/javascript">
+var breakLen;
+var sessionLen;
+var clockState;
+var scope;
+var timeLeft;
+
+$(document).ready( function() {
+	breakLen = 5;
+	sessionLen = 25;
+	clockState = "off";
+	scope = 'Session';
+	timeLeft = sessionLen;
+	$( "#time" ).html( sessionLen );
+	$( "#scope" ).html( scope );
+	$( "#txtBreak" ).html( " " + breakLen + " " );
+	$( "#txtSession" ).html( " " + sessionLen + " " );
+});
+
+function decrease( para ) {
+	if( clockState == "off" ) {
+		console.log( clockState );
+		switch( para ) {
+			case 'b':
+				if( breakLen > 1 ) breakLen--;
+				$( "#txtBreak" ).html( " " + breakLen + " " );
+				break;
+			case 's':
+				if( sessionLen > 1 ) sessionLen--;
+				$( "#txtSession" ).html( " " + sessionLen + " " );
+				break;
+		}
+		$( "#time" ).html( sessionLen );
+	}
+}
+
+function increase( para ) {
+	if( clockState == "off" ) {
+		console.log( clockState );
+		switch( para ) {
+			case 'b':
+				breakLen++;
+				$( "#txtBreak" ).html( " " + breakLen + " " );
+				break;
+			case 's':
+				sessionLen++;
+				$( "#txtSession" ).html( " " + sessionLen + " " );
+				break;
+		}
+		$( "#time" ).html( sessionLen );
+	}
+}
+
+function ooo() {
+	if( clockState == "on" ) {
+		clockState = "off";
+	}
+	else {
+		clockState = "on";
+		timeLeft = (scope == 'Session') ? sessionLen : breakLen;
+		timeLeft--;
+		var p = 60;
+		var timerVar = setInterval( function() {
+			if( clockState == "on" ) {
+				if( timeLeft > 0 && p == 0 ) {
+					timeLeft--;
+					p = 59;
+				}
+				else if( p > 0 ) {
+					p--;
+				}
+				else {
+					scope = ( scope == 'Session' ) ? 'Break!' : 'Session';
+					$( "#scope" ).html( scope );
+					timeLeft = (scope == 'Session') ? sessionLen : breakLen;
+					timeLeft--;
+					p = 59;
+				}
+				console.log( scope + " " + timeLeft + ":" + p );
+				$( "#time" ).html( timeLeft + ":" + p );
+			}
+			else clearInterval( timerVar );
+		}, 1000 );
+	}
+}
+		</script>
+	</body>
+</html>

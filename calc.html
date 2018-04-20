@@ -1,0 +1,217 @@
+<html>
+	<head>
+		<title>Electronic Calculator</title>
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+		<link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+		<link href="https://fonts.googleapis.com/css?family=Orbitron" rel="stylesheet" type="text/css">
+		<style>
+body {
+	background-color: #818181;
+	font-family: "Orbitron";
+}
+
+.box {
+	border-radius: 10px;
+	background-color: #dfd8d0;
+	width: 270px;
+	height: auto;
+	margin: 150px auto;
+	padding: 15px;
+}
+
+.innerBox {
+	height: auto;
+	margin: auto;
+	width: 90%;
+}
+
+.textBox {
+	border-radius: 3px;
+	background-color: #c3c2ab;
+	height: 75px;
+	margin: auto;
+	padding: 5px;
+}
+
+.btn-margin {
+	margin-left: 6.4%;
+}
+
+.btn {
+	width: 17% !important;
+}
+
+.btn-margin-equal {
+	width: 40.4% !important;
+}
+
+.row {
+	margin-top: 6px;
+}
+
+.curr {
+	font-size: 17px;
+}
+		</style>
+	</head>
+	
+	<body>
+		<div class="box">
+			<h3 class="text-center">Calculator</h3>
+			<div class="innerBox">
+				<div class="textBox">
+					<p id="currVal" class="text-right curr"></p>
+					<p id="allVal" class="text-right all"></p>
+				</div>
+			
+				<div class="buttons">
+					<div class="row">
+						<button class="btn btn-danger col-xs-2 btn-margin" onClick="ooo()">ON</button>
+						<button class="btn btn-danger col-xs-2 btn-margin" onClick="clearAll()">AC</button>
+						<button class="btn btn-danger col-xs-2 btn-margin" onClick="clearCurrent()">CE</button>
+						<button class="btn btn-secondary col-xs-2 btn-margin" onClick="operation('/')">&#247;</button>
+					</div>
+					<div class="row">
+						<button class="btn btn-secondary col-xs-2 btn-margin" onClick="number('7')">7</button>
+						<button class="btn btn-secondary col-xs-2 btn-margin" onClick="number('8')">8</button>
+						<button class="btn btn-secondary col-xs-2 btn-margin" onClick="number('9')">9</button>
+						<button class="btn btn-secondary col-xs-2 btn-margin" onClick="operation('x')">x</button>
+					</div>
+					<div class="row">
+						<button class="btn btn-secondary col-xs-2 btn-margin" onClick="number('4')">4</button>
+						<button class="btn btn-secondary col-xs-2 btn-margin" onClick="number('5')">5</button>
+						<button class="btn btn-secondary col-xs-2 btn-margin" onClick="number('6')">6</button>
+						<button class="btn btn-secondary col-xs-2 btn-margin" onClick="operation('-')">-</button>
+					</div>
+					<div class="row">
+						<button class="btn btn-secondary col-xs-2 btn-margin" onClick="number('1')">1</button>
+						<button class="btn btn-secondary col-xs-2 btn-margin" onClick="number('2')">2</button>
+						<button class="btn btn-secondary col-xs-2 btn-margin" onClick="number('3')">3</button>
+						<button class="btn btn-secondary col-xs-2 btn-margin" onClick="operation('+')">+</button>
+					</div>
+					<div class="row">
+						<button class="btn btn-secondary col-xs-2 btn-margin" onClick="number('0')">0</button>
+						<button class="btn btn-secondary col-xs-2 btn-margin" onClick="number('.')"><strong>.</strong></button>
+						<button class="btn btn-secondary col-xs-2 btn-margin btn-margin-equal" onClick="operation('=')">=</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	
+		<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+		<script type="text/javascript">
+var status;
+var allString;
+var currValue;
+var sign;
+var result;
+
+$( document ).ready( function() {
+	status = "off";
+});
+
+function ooo() {
+	if( status == "on" ) {
+		status = "off";
+		$( "#currVal" ).html( "" );
+		$( "#allVal" ).html( "" );
+	}
+	else {
+		status = "on";
+		clearAll();
+	}
+}
+
+function clearAll() {
+	if( status = "on" ) {
+		allString = "0";
+		currValue = "0";
+		sign = "";
+		result = 0;
+		$( "#currVal" ).html( currValue );
+		$( "#allVal" ).html( allString );
+	}
+}
+
+function clearCurrent() {
+	if( status == "on" ) {
+		if( sign == '=' ) clearAll();
+		currValue = "0";
+		$( "#currVal" ).html( currValue );
+	}
+}
+
+function number( num ) {
+	if( status == "on" ) {
+		if( sign == '=' ) clearAll();
+		if( currValue === "0" ) {
+			currValue = num;
+			$( "#allVal" ).html( allString+sign );
+		}
+		else {
+			currValue += num;
+		}
+		$( "#currVal" ).html( currValue );
+		if( currValue.length > 15 ) {
+			clearAll();
+			$( "#allVal" ).html( "Digit Limit Exceeded!" );
+		}
+	}
+}
+
+function operate( varSign ) {
+	switch( sign ) {
+		case '+':
+			result += Number( currValue );
+			break;
+		case '-':
+			result -= Number( currValue );
+			break;
+		case 'x':
+			result *= Number( currValue );
+			break;
+		case '/':
+			result /= Number( currValue );
+			break;
+	}
+	result = ( Math.round( result * 1000 )) / 1000;
+}
+
+function operation( oper ) {
+	if( status == "on" ) {
+		if( sign == '=' && oper != '=' ) {
+			allString = result.toString();
+		}
+		else {
+			if( allString == "0" ) {
+				allString = currValue;
+				result = Number( currValue );
+			}
+			else if( currValue !== "0" ) {
+				allString += sign;
+				allString += currValue;
+				operate( sign );
+				if( oper == '=' && sign != '=' ) allString += oper;
+			}
+		}
+		$( "#currVal" ).html( oper );
+		$( "#allVal" ).html( allString );
+		currValue = "0";
+		sign = oper;
+		if( oper == '=' ) {
+			$( "#allVal" ).html( allString+result );
+			$( "#currVal" ).html( result );
+			if( (allString+result).length > 18 ) {
+				clearAll();
+				$( "#allVal" ).html( "Digit Limit Exceeded!" );				
+			}
+		}
+		if( allString.length > 18 ) {
+			clearAll();
+			$( "#allVal" ).html( "Digit Limit Exceeded!" );				
+		}
+	}
+}
+		</script>
+	</body>
+</html>

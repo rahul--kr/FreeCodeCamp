@@ -1,0 +1,141 @@
+<html>
+	<head>
+		<title> Twitch Streamer </title>
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+		<link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+		<style>
+body {
+	background-color: #42affc !important;
+}
+
+.box {
+	width: 70%;
+	margin: 40px auto;
+	padding: 15px;
+	border-radius: 7px;
+	background-color: rgba( 255,255,255,0.5 );
+}
+
+.filter {
+	text-align: right;
+}
+
+img {
+	width: 10px;
+	border-radius: 50%;
+}
+
+.online > a {
+	color: green;
+}
+
+.offline > a {
+	color: red;
+}
+
+#allChannels > hr {
+	width: 80%;
+}
+
+.channel {
+	padding-bottom: 20px;
+}
+
+a:hover {
+	color: white;
+}
+		</style>
+	</head>
+	
+	<body>
+		<div class="box">
+			<div class="row">
+				<h2 class="col-xs-10 text-center">Twitch Streamer</h2>
+				<div class="col-xs-2">
+					<div id="allCH"> <a href="#" class="filter col-xs-12">All</a> </div>
+					<div id="onlCH"> <a href="#" class="filter col-xs-12">Online</a> </div>
+					<div id="offCH"> <a href="#" class="filter col-xs-12">Offline</a> </div>
+				</div>
+			</div>
+			<hr />
+			<div id="allChannels">
+				<div id="freecodecamp" class="channel row">
+					<a href="#" target="_blank">
+						<img src="#" class="col-xs-1 col-xs-offset-2">
+						<span class="col-xs-offset-1 col-xs-2 display_name">streams.channel.display_name</span>
+						<span class="col-xs-4 text-center game">streams.channel.game</span>
+					</a>
+				</div>
+				<div id="esl_sc2" class="channel row">
+					<a href="#" target="_blank">
+						<img src="#" class="col-xs-1 col-xs-offset-2">
+						<span class="col-xs-offset-1 col-xs-2 display_name">streams.channel.display_name</span>
+						<span class="col-xs-4 text-center game">streams.channel.game</span>
+					</a>
+				</div>
+				<div id="ej_sa" class="channel row">
+					<a href="#" target="_blank">
+						<img src="#" class="col-xs-1 col-xs-offset-2">
+						<span class="col-xs-offset-1 col-xs-2 display_name">streams.channel.display_name</span>
+						<span class="col-xs-4 text-center game">streams.channel.game</span>
+					</a>
+				</div>
+				<div id="gtamarathon" class="channel row">
+					<a href="#" target="_blank">
+						<img src="#" class="col-xs-1 col-xs-offset-2">
+						<span class="col-xs-offset-1 col-xs-2 display_name">streams.channel.display_name</span>
+						<span class="col-xs-4 text-center game">streams.channel.game</span>
+					</a>
+				</div>
+				<div id="gameloft" class="channel row">
+					<a href="#" target="_blank">
+						<img src="#" class="col-xs-1 col-xs-offset-2">
+						<span class="col-xs-offset-1 col-xs-2 display_name">streams.channel.display_name</span>
+						<span class="col-xs-4 text-center game">streams.channel.game</span>
+					</a>
+				</div>
+			</div>
+		</div>
+		<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+		<script type="text/javascript">
+channels = ["freecodecamp",
+			"esl_sc2",
+			"ej_sa",
+			"gtamarathon",
+			"gameloft"];
+
+$(document).ready( function() {
+	channels.forEach( function( channel ) {
+		var url = 'https://wind-bow.gomix.me/twitch-api/channels/' + channel + '?callback=?';
+		var data = $.getJSON( url, function() {
+			$( "#"+channel+" > a > .display_name" ).html( data.responseJSON.display_name );
+			$( "#"+channel+" > a > .game" ).html( data.responseJSON.game );
+			$( "#"+channel+" > a > img" ).attr( "src", data.responseJSON.logo );
+			$( "#"+channel+" > a" ).attr( "href", "https://www.twitch.tv/"+channel);
+		});
+	});
+	channels.forEach( function( channel ) {
+		var url = 'https://wind-bow.gomix.me/twitch-api/streams/' + channel + '?callback=?';
+		var data = $.getJSON( url, function() {
+			console.log( data.responseJSON );
+			if( data.responseJSON.stream === null )
+				$( "#"+channel ).addClass( "offline" );
+			else $( "#"+channel ).addClass( "online" ); 
+		});
+	});
+});
+
+$( "#allCH" ).on( "click", function() {
+	$( ".channel" ).removeClass( "hidden" );
+});
+$( "#onlCH" ).on( "click", function() {
+	$( ".online" ).removeClass( "hidden" );
+	$( ".offline" ).addClass( "hidden" );
+});
+$( "#offCH" ).on( "click", function() {
+	$( ".offline" ).removeClass( "hidden" );
+	$( ".online" ).addClass( "hidden" );
+});
+		</script>
+	</body>
+</html>

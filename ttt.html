@@ -1,0 +1,434 @@
+<html>
+	<head>
+		<title>tic tac toe</title>
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+		<link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+		<style>
+body {
+	background-color: #42affc;
+}
+
+.box {
+	border-radius: 7px;
+	background-color: rgba(255,255,255,0.4);
+	width: 700px;
+	height: 580px;
+	margin: 33px auto 0 auto;
+	padding: 15px;
+}
+
+#whoseTurn {
+	height: 50px;
+	width: 300px;
+	background-color: #42affc;
+	border-radius: 5px;
+	margin: 0 auto 15px auto;
+	padding-top: 12px;
+	text-align: center;
+	font-size: 18px;
+}
+
+.board {
+	width: 300px;
+	text-align: center;
+	font-size: 50px;
+	margin: auto;
+}
+
+.board1 {
+	width: 300px;
+	z-index: -1;
+	position: absolute;
+	margin-left: 185px;
+}
+
+.square {
+	width: 100px;;
+	height: 100px;
+	float: left;
+	border: 1px solid black;
+	background: none;
+	padding-top: 15px;
+}
+
+.square1 {
+	width: 100px;;
+	height: 100px;
+	float: left;
+	background: none;
+	border: 1px solid black;
+}
+
+.smallSup {
+	margin: -50px 0 0 -82px;
+}
+
+#one, #one1 {
+	border-width: 0px 1px 1px 0px;
+}
+
+#two, #two1 {
+	border-width: 0px 1px 1px 1px;
+}
+
+#three, #three1 {
+	border-width: 0px 0px 1px 1px;
+}
+
+#four, #four1 {
+	border-width: 1px 1px 1px 0px;
+}
+
+#five, #five1 {
+}
+
+#six, #six1 {
+	border-width: 1px 0px 1px 1px;
+}
+
+#seven, #seven1 {
+	border-width: 1px 1px 0px 0px;
+}
+
+#eight, #eight1 {
+	border-width: 1px 1px 0px 1px;
+}
+
+#nine, #nine1 {
+	border-width: 1px 0px 0px 1px;
+}
+
+.choose {
+	background-color: white;
+	border-radius: 5px;
+	z-index: 2;
+	width: 670px;
+	position: absolute;
+	margin: auto;
+	padding-top: 40px;
+	margin-top: 70px;
+	height: 160px;
+}
+
+#chooseSign {
+	z-index: 1;
+}
+
+.scoreBoard {
+	font-size: 18px;
+	background-color: #42affc;
+	z-index: 2;
+	height: 50px;
+	border-radius: 5px;
+	padding-top: 11px;
+}
+
+br {
+	clear: both;
+}
+
+hr {
+	width: 70%;
+}
+		</style>
+	</head>
+	
+	<body>
+		<div class="box">
+			<h1 class="text-center">Tic-Tac-Toe</h1>
+			<br />
+			<div>
+				<p id="whoseTurn"></p>
+			</div>
+			<div class="board1">
+				<button id="one1" class="square1">
+					<p class="smallSup">1</p>
+				</button>
+				<button id="two1" class="square1">
+					<p class="smallSup">2</p>
+				</button>
+				<button id="three1" class="square1">
+					<p class="smallSup">3</p>
+				</button>
+				<button id="four1" class="square1">
+					<p class="smallSup">4</p>
+				</button>
+				<button id="five1" class="square1">
+					<p class="smallSup">5</p>
+				</button>
+				<button id="six1" class="square1">
+					<p class="smallSup">6</p>
+				</button>
+				<button id="seven1" class="square1">
+					<p class="smallSup">7</p>
+				</button>
+				<button id="eight1" class="square1">
+					<p class="smallSup">8</p>
+				</button>
+				<button id="nine1" class="square1">
+					<p class="smallSup">9</p>
+				</button>
+			</div>
+			<div class="board">
+				<button id="one" class="square" onclick="play(1)">
+				</button>
+				<button id="two" class="square" onclick="play(2)">
+				</button>
+				<button id="three" class="square" onclick="play(3)">
+				</button>
+				<button id="four" class="square" onclick="play(4)">
+				</button>
+				<button id="five" class="square" onclick="play(5)">
+				</button>
+				<button id="six" class="square" onclick="play(6)">
+				</button>
+				<button id="seven" class="square" onclick="play(7)">
+				</button>
+				<button id="eight" class="square" onclick="play(8)">
+				</button>
+				<button id="nine" class="square" onclick="play(9)">
+				</button>
+			</div>
+			
+			<div class="choose" id="chooseOppo">
+				<p class="text-center">Choose your opponent :</p>
+				<button class="btn col-xs-2 col-xs-offset-3" id="hum" onclick="chosenOpp('h')">Human</button>
+				<button class="btn col-xs-2 col-xs-offset-2" id="comp" onclick="chosenOpp('c')">Computer</button>
+			</div>
+			
+			<div class="choose" id="chooseSign">
+				<p class="text-center">Choose your symbol (X goes first) :</p>
+				<button class="btn col-xs-2 col-xs-offset-3" id="cross" onclick="chosenSig('X')">X</button>
+				<button class="btn col-xs-2 col-xs-offset-2" id="noughts" onclick="chosenSig('O')">O</button>
+			</div>
+			<br /> <hr />
+			
+			<div class="scoreBoard text-center">
+				<p id="p1" class="col-xs-4">You : 0</p>
+				<p id="tie" class="col-xs-4">Ties : 0</p>
+				<p id="p2" class="col-xs-4">Opponent : 0</p>
+			</div>
+		</div>
+
+		<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+		<script type="text/javascript">
+var opponent, playerSymbol, opponentSymbol, chance, toMove;
+var arr = ['a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a'];
+var playerWin, opponentWin, tie, count, winner;
+
+$( document ).ready( function() {
+	playerWin = 0;
+	opponentWin = 0;
+	tie = 0;
+	newGame();
+});
+
+function chosenOpp( opp ) {
+	switch( opp ) {
+		case 'h':
+			opponent = 'Player 2';
+			break;
+		case 'c':
+			opponent = 'Computer';
+			break;
+	}
+	$( "#p1" ).html( "You : " + playerWin );
+	$( "#p2" ).html( opponent + " : " + opponentWin );
+	$( "#chooseOppo" ).addClass( "hide" );
+}
+
+function chosenSig( sig ) {
+	playerSymbol = sig;
+	opponentSymbol = sig == 'O' ? 'X' : 'O';
+	$( "#chooseSign" ).addClass( "hide" );
+	if( playerSymbol == chance ) $( "#whoseTurn" ).html( "Your turn." );
+	else $( "#whoseTurn" ).html( opponent + "'s turn." );
+	if( playerSymbol == 'O' ) play( 0 );
+}
+
+function newGame() {
+	$( ".square" ).html( "" );
+	for( var i=0; i<9; i++ ) arr[i] = 'a';
+	playerSymbol = playerSymbol == 'X' ? 'O' : 'X';
+	opponentSymbol = playerSymbol == 'X' ? 'O' : 'X';
+	chance = 'X';
+	count = 0;
+	winner = false;
+	if( playerSymbol == chance ) $( "#whoseTurn" ).html( "Your turn." );
+	else $( "#whoseTurn" ).html( opponent + "'s turn." );
+	if( opponent == "Computer" && opponentSymbol == chance ) play( 0 );
+}
+
+function check() {
+	if( arr[0] != 'a' && arr[0] == arr[1] && arr[1] == arr[2] ) winner = arr[2];
+	if( arr[3] != 'a' && arr[3] == arr[4] && arr[4] == arr[5] ) winner = arr[5];
+	if( arr[6] != 'a' && arr[6] == arr[7] && arr[7] == arr[8] ) winner = arr[8];
+	if( arr[0] != 'a' && arr[0] == arr[3] && arr[3] == arr[6] ) winner = arr[6];
+	if( arr[1] != 'a' && arr[1] == arr[4] && arr[4] == arr[7] ) winner = arr[7];
+	if( arr[2] != 'a' && arr[2] == arr[5] && arr[5] == arr[8] ) winner = arr[8];
+	if( arr[0] != 'a' && arr[0] == arr[4] && arr[4] == arr[8] ) winner = arr[8];
+	if( arr[2] != 'a' && arr[2] == arr[4] && arr[4] == arr[6] ) winner = arr[6];
+	if( winner ) {
+		// console.log( arr );
+		setTimeout( function() {
+			if( playerSymbol == winner ) {
+				alert( "You win!" );
+				$( "#p1" ).html( "You : " + ++playerWin );
+				newGame();
+			}
+			else {
+				alert( opponent + " wins!" );
+				$( "#p2" ).html( opponent + " : " + ++opponentWin );
+				newGame();
+			}
+		}, 500 );
+	}
+	else if( ++count == 9 ) {
+		// console.log( arr );
+		setTimeout( function() {
+			alert( "It was a draw!" );
+			$( "#tie" ).html( "Ties : " + ++tie );
+			newGame();
+		}, 500 );
+	}
+}
+
+function fillBox( spot ) {
+	switch( spot ) {
+		case 1:
+			$( "#one" ).html( chance );
+			break;
+		case 2:
+			$( "#two" ).html( chance );
+			break;
+		case 3:
+			$( "#three" ).html( chance );
+			break;
+		case 4:
+			$( "#four" ).html( chance );
+			break;
+		case 5:
+			$( "#five" ).html( chance );
+			break;
+		case 6:
+			$( "#six" ).html( chance );
+			break;
+		case 7:
+			$( "#seven" ).html( chance );
+			break;
+		case 8:
+			$( "#eight" ).html( chance );
+			break;
+		case 9:
+			$( "#nine" ).html( chance );
+			break;
+	}
+	arr[spot-1] = chance;
+}
+
+$( document ).keypress( function( event ) {
+	var btn = event.charCode - 48;
+	if( btn > 0 && btn < 10 ) play( btn );
+});
+
+function draw() {
+	for( var i=0; i<9; i++ ) {
+		if( arr[i] == 'a' ) return false;
+	}
+	return true;
+}
+
+function eval() {
+	var k;
+	if( arr[0] != 'a' && arr[0] == arr[1] && arr[1] == arr[2] ) k = arr[2];
+	if( arr[3] != 'a' && arr[3] == arr[4] && arr[4] == arr[5] ) k = arr[5];
+	if( arr[6] != 'a' && arr[6] == arr[7] && arr[7] == arr[8] ) k = arr[8];
+	if( arr[0] != 'a' && arr[0] == arr[3] && arr[3] == arr[6] ) k = arr[6];
+	if( arr[1] != 'a' && arr[1] == arr[4] && arr[4] == arr[7] ) k = arr[7];
+	if( arr[2] != 'a' && arr[2] == arr[5] && arr[5] == arr[8] ) k = arr[8];
+	if( arr[0] != 'a' && arr[0] == arr[4] && arr[4] == arr[8] ) k = arr[8];
+	if( arr[2] != 'a' && arr[2] == arr[4] && arr[4] == arr[6] ) k = arr[6];
+	if( k == playerSymbol ) return -10;
+	if( k == opponentSymbol ) return 10;
+}
+
+function minimax( depth, isMax ) {
+	var score = eval();
+	if( score == 10 || score == -10 ) return score;
+	if( draw() ) return 0;
+	
+	if( isMax ) {
+		var best = -1000;
+		for( var i=0; i<9; i++ ) {
+			if( arr[i] == 'a' ) {
+				arr[i] = opponentSymbol;
+				best = Math.max( best, minimax( depth+1, !isMax ) );
+				arr[i] = 'a';
+			}
+		}
+		return best;
+	}
+	else {
+		var best = 1000;
+		for( var i=0; i<9; i++ ) {
+			if( arr[i] == 'a' ) {
+				arr[i] = playerSymbol;
+				best = Math.min( best, minimax( depth+1, !isMax ) );
+				arr[i] = 'a';
+			}
+		}
+		return best;
+	}
+}
+
+function compPlay() {
+	var bestVal = -1000;
+	toMove = -1;
+	
+	for( var i=0; i<9; i++ ) {
+		if( arr[i] == 'a' ) {
+			arr[i] = opponentSymbol;
+			var moveVal = minimax( 0, false );
+			arr[i] = 'a';
+			if( moveVal > bestVal ) {
+				toMove = i + 1;
+				bestVal = moveVal;
+			}
+		}
+	}
+	return toMove;
+}
+
+function play( btn ) {
+	if( $( "#chooseSign").hasClass("hide") && !winner && count < 9 ) {
+		if( btn == 0 || arr[btn-1] == 'a' ) {
+			if( btn != 0 ) {
+				fillBox( btn );
+				check();
+				chance = chance == 'X' ? 'O' : 'X';
+				if( playerSymbol == chance ) $( "#whoseTurn" ).html( "Your turn." );
+				else $( "#whoseTurn" ).html( opponent + "'s turn." );
+// console.log( arr[0] + " " + arr[1] + " " + arr[2] ); console.log( arr[3] + " " + arr[4] + " " + arr[5] ); console.log( arr[6] + " " + arr[7] + " " + arr[8] );
+			}
+			if( opponent == "Computer") {
+				setTimeout( function () {
+					// choose best move for computer
+					toMove = compPlay();
+					// APPLY BEST CHOSEN MOVE
+					fillBox( toMove );
+					check();
+					chance = chance == 'X' ? 'O' : 'X';
+					if( playerSymbol == chance ) $( "#whoseTurn" ).html( "Your turn." );
+					else $( "#whoseTurn" ).html( opponent + "'s turn." );
+				}, 250);
+			}
+		}
+		else {
+			alert( "This place is already filled, please choose another.")
+		}
+	}
+// console.log( arr[0] + " " + arr[1] + " " + arr[2] ); console.log( arr[3] + " " + arr[4] + " " + arr[5] ); console.log( arr[6] + " " + arr[7] + " " + arr[8] );
+}
+		</script>
+	</body>
+</html>

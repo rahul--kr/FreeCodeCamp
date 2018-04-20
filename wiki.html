@@ -1,0 +1,97 @@
+<html>
+	<head>
+		<title>wiki viewer</title>
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+		<link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+		<style>
+body {
+	background-color: #f4a442;
+}
+
+.box {
+	width: 50%;
+	margin: 250px auto;
+	padding: 15px;
+	border-radius: 7px;
+	background-color: rgba( 255,255,255,0.6 );
+}
+
+.linkBox {
+	width: auto;
+	margin: auto;
+}
+
+.linkBox1 {
+	width: 90%;
+	margin: auto;
+}
+
+a.text-center {
+	color: inherit;
+	font-size: 16px;
+}
+
+.unstyledLink, .contents:hover, .contents:focus {
+	color: inherit;
+	text-decoration: none;
+}
+
+.newBox {
+	margin: auto;
+	padding: 1px 10px 1px 10px;
+	border-radius: 5px;
+	background-color: rgba( 255,255,255,0.6 );
+}
+
+.newBox:hover {
+	background-color: rgba( 255,255,255,1 );
+}
+		</style>
+	</head>
+
+	<body>
+		<div id="box" class="box">
+			<h1 class="text-center">free code camp <a href="https://en.wikipedia.org/wiki/main" target="_blank" class="unstyledLink">Wikipedia</a> viewer</h1>
+			<div>
+				<div class="linkBox text-center">
+					<a href="https://en.wikipedia.org/wiki/Special:Random" target="_blank" class="text-center"><i class="fa fa-random" aria-hidden="true"> </i> let me surprise you! <i class="fa fa-random" aria-hidden="true"> </i></a>
+				</div>
+				<br/>
+				<div class="input row">
+					<div class="col-xs-6 col-xs-offset-2"><input type="text" id="inputText" class="form-control" placeholder="what can I fetch you?"/></div>
+					<button id="btn" class="btn col-xs-2"> <i class="fa fa-search" aria-hidden="true"> </i> GO </button>
+				</div>
+				<br />
+			</div>
+		</div>
+		
+		<div id="textData">
+		</div>
+
+		<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+		<script type="text/javascript">
+$( "#btn" ).click( function() {
+	var inputText = $( "#inputText" ).val();
+	if( inputText == "" ) inputText = "Philosophy";
+	var api = 'https://en.wikipedia.org/w/api.php?action=query&prop=pageimages|extracts&format=json&gsrlimit=10&generator=search&gsrnamespace=0&pilimit=max&exintro&explaintext&exsentences=1&exlimit=max&origin=*&gsrsearch=';
+	var qryRes = $.getJSON(( api + inputText ), function() {
+		$( "#box" ).removeClass( "box" );
+		
+		var htmlString = '';
+		$.each( qryRes.responseJSON.query.pages, function() {
+			htmlString += '<div class="linkBox1">'
+				+ '<a href="https://en.wikipedia.org/?curid=' + this.pageid + '" target="_blank" class="unstyledLink contents">'
+				+ '<div class="newBox">'
+				+ '<h4 class="title">' + this.title + '</h4>'
+				+ '<p>' + this.extract + '</p>'
+				+ '</div></a></div><br/>';
+		});
+		$( "#textData" ).html( htmlString );
+	});
+	$( ".linkBox1" ).off().on( 'mouseover mouseout', function() {
+		$( this ).toggleClass( "highlight" );
+	});
+});
+		</script>
+	</body>
+</html>
